@@ -6,5 +6,3 @@ def write_log_file(messw):
     with open("log.txt", "a") as log:
         log.write("Der Messwert ist: " + str(messw) + "\n")
 
-if __name__ == "__main__":
-    main()

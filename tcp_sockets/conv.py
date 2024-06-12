@@ -2,8 +2,10 @@
 #client schickt diese zahl an log und stat
 
 #Beispiel - noch nicht an die Aufgabe angepasst - nur Grundidee
-import random
 #mit server anfangen und nicht client!
+
+
+import random
 
 # Funktion zum Schreiben von Zufallszahlen in eine Datei
 def schreibe_zufallszahlen_in_datei(zufallszahlen, anzahl=5):
