@@ -19,5 +19,12 @@ signal.signal(signal.SIGINT, signal_handler)
 while True:
     pass
 
-
 #----------------------------------------------------
+
+# Konstanten für Host und Ports
+HOST = '127.0.0.1'
+CONV_PORT = 5001
+LOG_PORT = 5002
+STAT_PORT = 5003
+REPORT_PORT = 5004
+
