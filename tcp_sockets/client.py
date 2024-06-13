@@ -1,5 +1,5 @@
 import socket
-import struct
+import struct 
 
 def receive_integer(host='localhost', port=12345):
     # Erstelle einen TCP/IP-Socket
