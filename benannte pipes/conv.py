@@ -12,7 +12,20 @@ def analog_to_digital_converter():
 def conv_process():
      pipe_log = '/tmp/conv_to_log'    # Pfad zur benannten Pipe für den Log-Prozess
      pipe_stat = '/tmp/conv_to_stat'  # Pfad zur benannten Pipe für den Stat-Prozess
-     pass
+     
+     fifo_log = open(pipe_log, 'w')          # Öffnet die Pipes zum Schreiben (w)
+     fifo_stat = open(pipe_stat, 'w')
+
+     value = analog_to_digital_converter()   # Ruft die Funktion auf um den Wert in die pipes zu schreiben
+ 
+     fifo_log.write(f"{value}\n")            # Schreibt die Zahl in die die Pipe mit einem Zeilenumbruch danach
+     fifo_log.flush()                        # Hiermit wird sichergestellt, dass die Zahl sofort in die Pipe geschrieben wird
+
+     fifo_stat.write(f"{value}\n")
+     fifo_stat.flush()
+
+     fifo_log.close()                        # Schließt die Pipes
+     fifo_stat.close()
 
 if __name__ == "__main__":
     # Startet den Conv-Prozess
