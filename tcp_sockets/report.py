@@ -1,18 +1,23 @@
 #enthält server der stat zuhört und mittelwert und summe bekommt
 #gibt daten in shell aus
+#kein client
 
 import socket
 import struct
 import time
 
-HOST = '127.0.0.1'
-STAT_PORT = 5003
+HOST = "localhost" 
+REPORT_PORT = 5004
 
 # Report-Prozess: Gibt die statistischen Daten in der Shell aus
 def report_process():
-    report_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    report_socket.connect((HOST, STAT_PORT))
+    report_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #hey ich existiere
+    report_socket.bind((HOST, REPORT_PORT))   #hey auf dem port bin ich
+    report_socket.listen(1)    #hey ich höre jetzt auch anderen zu
+    print(f"Server listening on {HOST}:{REPORT_PORT}")
+    conn, addr = report_socket.accept()   #hey ich seh dich jetzt
     print("Report-Prozess verbunden.")
+
 
     while True:
         data = report_socket.recv(8)
@@ -25,3 +30,6 @@ def report_process():
         print(f"Mittelwert: {mittelwert}, Summe: {summe}")
         #Pausierung des Prozesses für eine Sekunde
         time.sleep(1)
+
+if __name__ == '__main__':
+    report_process()

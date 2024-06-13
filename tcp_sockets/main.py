@@ -3,12 +3,24 @@
 #signalhandler sigint noch einbauen
 #fehlerhafte kommandozeilen eingaben abfangen!!
 
-#---------------------------------------------------
+
+    
 import sys
 import signal
+from log import log_process
+
+# Konstanten für Host und Ports
+HOST = '127.0.0.1'
+CONV_PORT = 5001
+LOG_PORT = 5002
+STAT_PORT = 5003
+REPORT_PORT = 5004
+
+if __name__ == '__main__':
 
 # Signalhandler für SIGINT
-def signal_handler(sig, frame):
+
+#def signal_handler(sig, frame):
     print("Programm wird beendet...")
     sys.exit(0)
 
@@ -19,12 +31,4 @@ signal.signal(signal.SIGINT, signal_handler)
 while True:
     pass
 
-#----------------------------------------------------
-
-# Konstanten für Host und Ports
-HOST = '127.0.0.1'
-CONV_PORT = 5001
-LOG_PORT = 5002
-STAT_PORT = 5003
-REPORT_PORT = 5004
 
