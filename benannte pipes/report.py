@@ -1,6 +1,6 @@
 import os
 
-# Erster Entwurf für den Report-Prozess. Ausgabe der Daten 
+# Erster Entwurf für den Report-Prozess. 
 def report_process():
         pipe_report = '/tmp/stat_to_report'  # Pfad zur benannten Pipe für den Report-Prozess
         
