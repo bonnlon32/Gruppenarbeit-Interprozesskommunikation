@@ -27,7 +27,7 @@ def stat_process():
     anzahl = 0
 
     while True:
-        data = conn.recv(8) #nicht nur 4 byte weil float empfangen wird??? oder doch möglich?
+        data = conn.recv(4) #nicht nur 4 byte weil float empfangen wird??? oder doch möglich?
         if not data:
             break
         messwert = struct.unpack('!I', data)[0]

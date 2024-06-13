@@ -20,7 +20,7 @@ def report_process():
 
 
     while True:
-        data = conn.recv(8)
+        data = conn.recv(12)
         if not data:
             break
         mittelwert = struct.unpack('!f', data[:8])[0]

@@ -18,7 +18,7 @@ def log_process():
 
     with open("log.txt", "a") as log: #Öffnet die Datei zum Anhängen und Dateizeiger ans Ende der Datei (Anhangsmodus)
         while True:
-            data = conn.recv(8) #Anzahl der Bytes, die aus dem Socket gelesen werden sollen 
+            data = conn.recv(4) #Anzahl der Bytes, die aus dem Socket gelesen werden sollen 
             if not data: #fehler prävention
                 break
             messwert = struct.unpack('!I', data)  #in binäre form gewandelte daten werden wieder umgewandelt
