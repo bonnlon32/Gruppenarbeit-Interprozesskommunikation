@@ -24,8 +24,8 @@ def conv_process():
     while True:
         messwert = random.randint(0, 10)  # Zufallszahl als Messwert
         # Messwert senden
-        log_socket.sendall(str(messwert).encode())
-        stat_socket.sendall(str(messwert).encode()) 
+        log_socket.sendall(struct.pack('!f', messwert))
+        stat_socket.sendall(struct.pack('!f', messwert))
 
         time.sleep(1)  # Wartezeit zwischen den Messungen
 

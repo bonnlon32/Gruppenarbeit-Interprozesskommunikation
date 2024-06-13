@@ -5,6 +5,7 @@ import struct
 HOST = "localhost" 
 LOG_PORT = 5002
 
+
 # Log-Prozess: Schreibt Messwerte in eine lokale Datei
 def log_process():
     log_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #hey ich existiere
@@ -12,8 +13,8 @@ def log_process():
     log_socket.listen(1)    #hey ich höre jetzt auch anderen zu
     print(f"Server listening on {HOST}:{LOG_PORT}")
     conn, addr = log_socket.accept()   #hey ich seh dich jetzt
-    # Adresse des Clients, der die Verbindung hergestellt hat, addr ein Tupel (client_ip, client_port).
-
+    
+   
 
     with open("log.txt", "a") as log: #Öffnet die Datei zum Anhängen und Dateizeiger ans Ende der Datei (Anhangsmodus)
         while True:

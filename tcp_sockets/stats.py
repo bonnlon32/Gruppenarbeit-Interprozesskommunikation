@@ -1,15 +1,6 @@
 #enthält server der zuhört und zahlen von conv bekommt
-#client
-#rechnet mittelwert und summe aus werten zsm 
-#mittelwert wird float- schwierig zu übertragen, also umgehen
-#wir das und übertragen als integer und basteln am ende wieder als 
-#float zusammen
-
 # enthält client der den mittelwert und summe an report schickt
     
-
-#Beispiel - noch nicht an die Aufgabe angepasst - nur Grundidee
-
 import socket
 import struct
 
@@ -25,29 +16,26 @@ def stat_process():
     stat_socket.listen(1)
     print("Stat-Prozess gestartet und wartet auf Verbindungen...")
     conn, addr = stat_socket.accept()
-    print(f"Verbindung zu {addr} hergestellt.")
+    print(f"Verbindung zu {addr} hergestellt.") # addr = Adresse des Clients, der die Verbindung hergestellt hat, addr ein Tupel (client_ip, client_port).
 
     #client
     report_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     report_socket.connect((HOST, STAT_PORT))
     print(f"Verbindung zu stat hergestellt.")
   
-  
-
-
     summe = 0
     anzahl = 0
 
     while True:
-        data = conn.recv(4) #nicht nur 4 byte weil float empfangen wird???
+        data = conn.recv(4) #nicht nur 4 byte weil float empfangen wird??? oder doch möglich?
         if not data:
             break
-        messwert = struct.unpack(data)
+        messwert = struct.unpack('!f', data)[0]
         summe += messwert
         anzahl += 1
         mittelwert = summe / anzahl
-        conn.send(struct.pack(mittelwert))
-        conn.send(struct.pack(summe))
+        report_socket.sendall(struct.pack('!d', mittelwert))
+        report_socket.sendall(struct.pack('!I', summe))
 
 if __name__ == '__main__':
     stat_process()
