@@ -10,24 +10,32 @@
 
 #Beispiel - noch nicht an die Aufgabe angepasst - nur Grundidee
 
-# Funktion zur Berechnung von Statistiken aus den Zufallszahlen
-def statistikenBerechnen(zufallszahlen, pipe_name):
-    summenwert = 0
+import socket
+import struct
+
+HOST = '127.0.0.1'
+STAT_PORT = 5003
+
+# Stat-Prozess: Berechnet Mittelwert und Summe der Messwerte
+def stat_process():
+    stat_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    stat_socket.bind((HOST, STAT_PORT))
+    stat_socket.listen(1)
+    print("Stat-Prozess gestartet und wartet auf Verbindungen...")
+    conn, addr = stat_socket.accept()
+    print(f"Verbindung zu {addr} hergestellt.")
+
+    summe = 0
     anzahl = 0
-    zahlen = []
 
-# Zufallszahlen aus der Datei lesen und Statistiken berechnen
-    with open(zufallszahlen, 'r') as datei:
-        for zeile in datei:
-            zahl = int(zeile.strip())
-            zahlen.append(zahl)
-            summenwert += zahl
-            anzahl += 1
-
-# Mittelwert berechnen
-    if anzahl > 0:
-        durchschnitt = summenwert / anzahl
-    else:
-        durchschnitt = 0
-   
+    while True:
+        data = conn.recv(4) #nicht nur 4 byte weil float empfangen wird???
+        if not data:
+            break
+        messwert = struct.unpack(data)
+        summe += messwert
+        anzahl += 1
+        mittelwert = summe / anzahl
+        conn.send(struct.pack(mittelwert))
+        conn.send(struct.pack(summe))
 

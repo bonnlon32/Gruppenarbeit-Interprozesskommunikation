@@ -5,7 +5,6 @@ import socket
 import struct
 
 HOST = '127.0.0.1'
-CONV_PORT = 5001
 LOG_PORT = 5002
 
 # Log-Prozess: Schreibt Messwerte in eine lokale Datei
