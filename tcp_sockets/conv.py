@@ -1,19 +1,34 @@
-#random zahl wird erstellt
-#client schickt diese zahl an log und stat
+#client
 
-#Beispiel - noch nicht an die Aufgabe angepasst - nur Grundidee
-#mit server anfangen und nicht client!
+import random #für random zahl
+import time #für 1 sek abstände
+import socket #für erstellung der sockets
+import struct #um strings von bytes in und aus verschiedenen c-strukturen zu packen & zu entpacken
+
+# Konstanten für Host und Ports (wohin?? hier rein oder main?)
+HOST = "localhost" #localhost adresse (lokal auf dem betriebssystem ohne das netzwerk zu verlassen)
+LOG_PORT = 5002
+STAT_PORT = 5003  #beliebige zahl, nur manche adressen sind reserviert
+
+# Conv-Prozess: Generiert Zufallszahlen und sendet sie an Log und Stat
+def conv_process():
+
+     #client erstellen und zu port verbinden
+     log_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+     stat_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+ 
+     log_socket.connect((HOST, LOG_PORT))
+     stat_socket.connect((HOST, STAT_PORT))
+     print(f"Verbindung zu Log und Stat hergestellt.")
+
+     while True:
+         messwert = random.randint(0, 10)  # Zufallszahl als Messwert
+         # Messwert senden
+         log_socket.sendall(struct.pack('!I', messwert))
+         stat_socket.sendall(struct.pack('!I', messwert))
+
+         time.sleep(1)  # Wartezeit zwischen den Messungen
 
 
-import random
-
-# Funktion zum Schreiben von Zufallszahlen in eine Datei
-def schreibe_zufallszahlen_in_datei(zufallszahlen, anzahl=5):
-    with open(zufallszahlen, 'w') as datei:
-        for _ in range(anzahl):
-            zahl = random.randint(0, 100)
-            datei.write(f"{zahl}\n")
-
-# Zufallszahlen in Datei schreiben
-    schreibe_zufallszahlen_in_datei(zufallszahlen)
-
+if __name__ == '__main__':
+    conv_process()
