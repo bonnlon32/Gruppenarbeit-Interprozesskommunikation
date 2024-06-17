@@ -28,5 +28,10 @@ def conv_process():
      fifo_stat.close()
 
 if __name__ == "__main__":
+     
+    if not os.path.exists('/tmp/conv_to_log'):  # Erstellt die benannten Pipe, falls sie nicht existiert
+        os.mkfifo('/tmp/conv_to_log')
+    if not os.path.exists('/tmp/conv_to_stat'): # Erstellt die benannten Pipe, falls sie nicht existiert
+        os.mkfifo('/tmp/conv_to_stat')
     # Startet den Conv-Prozess
     conv_process()
