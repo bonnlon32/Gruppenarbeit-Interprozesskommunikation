@@ -1,4 +1,5 @@
 import os
+import time
 
 # Erster Entwurf für den Log-Prozess. Hier werden die Zufallszahlen aus conv in eine Datei gespeichert.
 def log_process():
@@ -13,6 +14,7 @@ def log_process():
         if value:                             # Prüft, dass die Zahl nicht null ist
             log.write(f"{value}\n")           # Schreibt die Zahl die im Moment in value gespeichert ist in der Datei und macht danach immer einen Zeilenumbruch
             log.flush()                       # Hiermit wird die Zahl sofort in die Datei geschrieben
+        time.sleep(1)                         # Stellt sicher, dass es immer eine Sekunde wartet, bevor die nächste Zahl in die Pipe geschrieben wird
 
      fifo_log.close()                         # Schließt die Pipe
      log.close()                              # Schließt die Datei
