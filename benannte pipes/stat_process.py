@@ -1,4 +1,5 @@
 import os
+import time
 
 # Erster Entwurf für den Stat-Prozess. Hier wird mit den zuvor erzeugten Zufallszahlen Summe und Durchschnitt berechnet
 def stat_process():
@@ -17,12 +18,13 @@ def stat_process():
             summenwert = summenwert + zahl
             anzahl = anzahl + 1                # Anzahl um den Durchschnitt zu berechnen
   
-    durchschnitt = summenwert / anzahl if anzahl > 0 else 0 # Durchschnitt aus Anzahl und Summe berechnen
+        durchschnitt = summenwert / anzahl if anzahl > 0 else 0 # Durchschnitt aus Anzahl und Summe berechnen
 
 
-    with open(pipe_report, 'w') as fifo_report:                       # Pipe zu Report öffnen
+        with open(pipe_report, 'w') as fifo_report:                       # Pipe zu Report öffnen
                 fifo_report.write(f"{summenwert}\n{durchschnitt}\n")  # Die Summe und den Durchschnitt in die Pipe schreiben
 
+    time.sleep(1)
 
     fifo_stat.close()                          #Pipe wird geschlossen
 
