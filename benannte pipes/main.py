@@ -14,12 +14,18 @@ pipe_stat_to_report = '/tmp/stat_to_report'  # Der Pfad für die benannten Pipe 
 
 # Signalhandler für SIGINT implementieren (Ctrl+C)
 def signal_handler(sig, frame):
-    print("Abbruchsignal empfangen. Prozesse werden beendet...")
-    cleanup()  # Aufruf der Cleanup-Funktion
+    print("Abbruchsignal empfangen. Prozesse werden beendet...") # Wird ausgegeben
+    clean()      # Aufruf der Cleanup-Funktion
     sys.exit(0)  # Beendet das Programm
 
+# Clean-Funktion erstellen, damit beim beenden die Pipes entfernt werden
+def clean():
+    for pipe in [pipe_conv_to_log, pipe_conv_to_stat, pipe_stat_to_report]: # speichert alle drei Pipes in 'pipe'
+        if os.path.exists(pipe):  # Überprüft, ob die Pipe existiert
+            os.unlink(pipe)       # Entfernt die Pipe
+
 def main():
-    pass    # pass ist ein Platzhalter für die spätere Hauptlogik des Programms
+    pass                   # pass ist ein Platzhalter für die spätere Hauptlogik des Programms
 
 if __name__ == "__main__": # Überprüft, ob das Skript direkt ausgeführt wird
     main()                 # Ruft die Hauptfunktion auf
