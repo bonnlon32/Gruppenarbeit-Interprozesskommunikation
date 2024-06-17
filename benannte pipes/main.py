@@ -24,8 +24,26 @@ def clean():
         if os.path.exists(pipe):  # Überprüft, ob die Pipe existiert
             os.unlink(pipe)       # Entfernt die Pipe
 
+
 def main():
-    pass                   # pass ist ein Platzhalter für die spätere Hauptlogik des Programms
+    # Erstellt die benannten Pipes, wenn sie nicht existieren
+    for pipe in [pipe_conv_to_log, pipe_conv_to_stat, pipe_stat_to_report]: # Die drei Pipes werden in 'pipe' gespeichert
+        if not os.path.exists(pipe):  # Überprüft, ob die Pipe nicht existiert
+            os.mkfifo(pipe)           # Erstellt die Pipe
+
+    # Erstellen und Starten der Prozesse
+    processes = [
+        Process(target=conv_process),   # Erstellen des Prozesses für conv_process
+        Process(target=log_process),    # Erstellen des Prozesses für log_process
+        Process(target=stat_process),   # Erstellen des Prozesses für stat_process
+        Process(target=report_process)  # Erstellen des Prozesses für report_process
+    ]
+    
+    for p in processes:
+        p.start()  # Startet jeden Prozess
+    
+    for p in processes:
+        p.join()  # Wartet, bis jeder Prozess beendet ist
 
 if __name__ == "__main__": # Überprüft, ob das Skript direkt ausgeführt wird
     main()                 # Ruft die Hauptfunktion auf
