@@ -1,5 +1,6 @@
 import os
 import random
+import time
 # Erster Entwurf für den Conv-Prozess. Hier werden Zufallszahlen generiert die später weiterverarbeitet werden
 
                                                    # Funktion simuliert einen A/D-Wandler(Von Noah).
@@ -16,13 +17,13 @@ def conv_process():
      fifo_log = open(pipe_log, 'w')          # Öffnet die Pipes zum Schreiben (w)
      fifo_stat = open(pipe_stat, 'w')
 
-     value = analog_to_digital_converter()   # Ruft die Funktion auf um den Wert in die pipes zu schreiben
- 
-     fifo_log.write(f"{value}\n")            # Schreibt die Zahl in die die Pipe mit einem Zeilenumbruch danach
-     fifo_log.flush()                        # Hiermit wird sichergestellt, dass die Zahl sofort in die Pipe geschrieben wird
-
-     fifo_stat.write(f"{value}\n")
-     fifo_stat.flush()
+     while True:                              # Endlosschleife erstellen
+      value = analog_to_digital_converter()   # Ruft die Funktion auf um den Wert in die pipes zu schreiben
+      fifo_log.write(f"{value}\n")            # Schreibt die Zahl in die die Pipe mit einem Zeilenumbruch danach
+      fifo_log.flush()                        # Hiermit wird sichergestellt, dass die Zahl sofort in die Pipe geschrieben wird
+      fifo_stat.write(f"{value}\n")
+      fifo_stat.flush()
+      time.sleep(1)                           # Stellt sicher, dass es immer eine Sekunde wartet, bevor eine neue Zahlgeneriert und in die Pipe geschrieben wird
 
      fifo_log.close()                        # Schließt die Pipes
      fifo_stat.close()
