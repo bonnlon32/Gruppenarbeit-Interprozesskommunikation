@@ -8,8 +8,8 @@ def generate_random_number():
     return round(random_number, 2)
 
 #Verzeichnis zum Speichern der Datei
-#directory = "/path/to/your/directory"      #Unix
-directory = "C:\\Users\\noahr\\txtBSRN"     #Windows
+#directory = "/path/to/your/directory"      #für Unix
+directory = "C:\\Users\\noahr\\txtBSRN"     #für Windows
 
 
 filename = os.path.join(directory, "random_numbers.txt")    # Datei, in die die zufälligen Zahlen geschrieben werden sollen
@@ -23,6 +23,6 @@ while True:     # Endlosschleife
     with open(filename, "a") as file:   # Öffnet Datei im Anhangmodus (a = append)
         file.write(f"{number}\n")
     
-    print(f"Random: {number} in die Datei '{filename}' geschrieben.")
+    print(f"Zufallswert: {number}\t-> In die Datei '{filename}' geschrieben.")
     
     time.sleep(1)
