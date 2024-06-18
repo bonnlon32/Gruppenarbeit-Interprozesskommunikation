@@ -22,10 +22,10 @@ def conv_process():
      print(f"Verbindung zu Log und Stat hergestellt.")
 
      while True:
-         messwert = random.randint(0, 10)  # Zufallszahl als Messwert
+         measuredValue = random.randint(0, 10)  # Zufallszahl als Messwert
          # Messwert senden
-         log_socket.sendall(struct.pack('!I', messwert))
-         stat_socket.sendall(struct.pack('!I', messwert))
+         log_socket.sendall(struct.pack('!I', measuredValue))
+         stat_socket.sendall(struct.pack('!I', measuredValue))
 
          time.sleep(1)  # Wartezeit zwischen den Messungen
 

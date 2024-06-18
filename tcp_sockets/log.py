@@ -21,8 +21,8 @@ def log_process():
             data = conn.recv(4) #Anzahl der Bytes, die aus dem Socket gelesen werden sollen 
             if not data: #fehler prävention
                 break
-            messwert = struct.unpack('!I', data)  #in binäre form gewandelte daten werden wieder umgewandelt
-            log.write("Der Messwert ist: " + str(messwert[0]) + "\n")
+            measuredValue = struct.unpack('!I', data)  #in binäre form gewandelte daten werden wieder umgewandelt
+            log.write("Der Messwert ist: " + str(measuredValue[0]) + "\n")
 
 if __name__ == '__main__':
     log_process()
