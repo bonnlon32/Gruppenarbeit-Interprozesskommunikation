@@ -8,12 +8,18 @@ def report_process():
               os.mkfifo(pipe_report)
 
         while True:                                   # Endlosschleife
-         with open(pipe_report, 'r') as fifo_report:  # Öffnet die benannte Pipe zum lesen
-            daten = fifo_report.readlines()           # Liest alle Werte auf der Pipe aus und speichert sie in der Liste daten
-            if daten:                                 # Prüft, dass die Liste nciht leer ist
-                summenwert, durchschnitt = map(float, daten) # Hier werden die eingelesenen Zahlen in Gleitkommazahlen umgewandelt und sie werden Summenwert und Durchschnitt zugewiesen
-                print(f"Report: Summe = {summenwert}, Mittelwert = {durchschnitt}") # Gibt die Summe und den Durchschnitt auf der Konsole aus
-
+           try:
+                 with open(pipe_report, 'r') as fifo_report:  # Öffnet die benannte Pipe im Lesemodus
+                     daten = fifo_report.readlines()          # Liest alle Zeilen aus der Pipe und speichert sie in der Liste 'daten'
+                     if daten:                                # Prüft, ob 'daten' nicht leer ist
+                         try:
+                            summenwert, durchschnitt = map(float, daten)  # Wandelt die Werte in der Liste 'daten' in Gleitkommazahlen um und weist sie 'summenwert' und 'durchschnitt' zu
+                            print(f"Report: Summe = {summenwert}, Mittelwert = {durchschnitt}")  # Gibt die Summe und den Durchschnitt auf der Konsole aus
+                         except ValueError as e:  # Fängt Fehler ab, wenn die Werte in 'daten' nicht in Gleitkommazahlen umgewandelt werden können
+                            print(f"ValueError: {e}. Data received: {daten}")  # Gibt eine Fehlermeldung aus, falls ein Fehler auftritt, und zeigt die empfangenen Daten an
+           except Exception as e:  # Fängt alle anderen möglichen Ausnahmen ab
+                print(f"Error reading from pipe: {e}")  # Gibt eine Fehlermeldung aus, falls ein Fehler beim Lesen der Pipe auftritt
+       
         time.sleep(1)    # Erstellt eine Zeitversögerung von eienr Sekunde
 
 if __name__ == "__main__":

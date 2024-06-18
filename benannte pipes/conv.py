@@ -1,7 +1,6 @@
 import os
 import random
 import time
-# Erster Entwurf für den Conv-Prozess. Hier werden Zufallszahlen generiert die später weiterverarbeitet werden
 
         # Funktion simuliert einen A/D-Wandler(Von Noah).
 def analog_to_digital_converter():
