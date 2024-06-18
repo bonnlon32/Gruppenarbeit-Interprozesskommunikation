@@ -28,15 +28,15 @@ def stat_process():
     count = 0
 
     while True:
-        data = conn.recv(4) #nicht nur 4 byte weil float empfangen wird??? oder doch möglich?
-        if not data:
+        data = conn.recv(12) # 12 Bytes = Summe der Größen von float (4 Bytes) und double (8 Bytes)
+        if len(data) < 12:
             break
         messwert = struct.unpack('!I', data)[0]
         total += messwert
         count += 1
         average = total / count
-        report_socket.sendall(struct.pack('!f', average))
-        report_socket.sendall(struct.pack('!d', total))
+        report_socket.sendall(struct.pack('!f', average)) # average wird aus den ersten 4 Bytes (data[:4]) als float entpackt
+        report_socket.sendall(struct.pack('!d', total)) # total wird aus den verbleibenden 8 Bytes (data[4:]) als double entpackt
 
 if __name__ == '__main__':
     stat_process()
