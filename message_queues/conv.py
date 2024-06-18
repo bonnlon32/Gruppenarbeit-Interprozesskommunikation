@@ -1,26 +1,23 @@
 import random
 import time
 #A/D-Converter
-#prüft Messwerte auf Plausibilität (unklar) 
-#konvertiert sie gegebenenfalls (unklar)
 #Synchronisation(!)
+#Binär oder Dezimal -> ist unsere Wahl
 
 def analog_to_digital_converter():
-    #Eingangswert (zufällig zwischen 0-5 Volt)
-    #double
-    analog_value = random.uniform(0, 5)
+    #Gibt zufälligen Eingangswert (double zwischen -1 bis 5 Volt) aus, um A/D-Converter mit einschließlich nicht plausiblen Werten zu simulieren
+    digital_value = round(random.uniform(-1, 5),2)   
     
-    #analoger Wert in einen digitalen Wert (8Bit Auflösung)
-    digital_value = int((analog_value /5)*255)
-    #Binär oder dezimal? (unklar)
-
+    if digital_value < 0:        #Prüfung des Messwerts auf Plausibilität
+        digital_value = 0        #Wenn Messwert nicht plausibel, wird auf 0 gesetzt
+    
     return digital_value
+    
 
 def main():
     while True:
         
-        # Ausgabe und Aufruf des Converters
-        print("Digitaler Eingangswert:", analog_to_digital_converter())
+        print("Digitaler Eingangswert:", analog_to_digital_converter())  # Ausgabe und Aufruf des Converters
         
         time.sleep(1)
 
