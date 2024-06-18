@@ -21,9 +21,11 @@ def signal_handler(sig, frame):
 # Clean-Funktion erstellen, damit beim beenden die Pipes entfernt werden
 def clean():
     for pipe in [pipe_conv_to_log, pipe_conv_to_stat, pipe_stat_to_report]: # speichert alle drei Pipes in 'pipe'
-        if os.path.exists(pipe):  # Überprüft, ob die Pipe existiert
-            os.unlink(pipe)       # Entfernt die Pipe
-
+        try:
+            if os.path.exists(pipe):  # Überprüft, ob die Pipe existiert
+               os.unlink(pipe)        # Entfernt die Pipe
+        except FileNotFoundError: 
+            pass                      # Wenn die Datei nicht gefunden wird, wird die Ausnahme ignoriert
 
 def main():
     # Erstellt die benannten Pipes, wenn sie nicht existieren
