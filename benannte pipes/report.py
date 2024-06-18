@@ -4,6 +4,9 @@ import time
 def report_process():
         pipe_report = '/tmp/stat_to_report'  # Pfad zur benannten Pipe für den Report-Prozess
         
+        if not os.path.exists(pipe_report):
+              os.mkfifo(pipe_report)
+
         while True:                                   # Endlosschleife
          with open(pipe_report, 'r') as fifo_report:  # Öffnet die benannte Pipe zum lesen
             daten = fifo_report.readlines()           # Liest alle Werte auf der Pipe aus und speichert sie in der Liste daten
