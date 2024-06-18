@@ -25,6 +25,7 @@ def stat_process():
   
     total = 0
     average = 0
+    count = 0
 
     while True:
         data = conn.recv(4) #nicht nur 4 byte weil float empfangen wird??? oder doch möglich?
