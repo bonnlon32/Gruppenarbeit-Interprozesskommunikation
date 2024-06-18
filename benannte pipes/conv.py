@@ -3,10 +3,14 @@ import random
 import time
 # Erster Entwurf für den Conv-Prozess. Hier werden Zufallszahlen generiert die später weiterverarbeitet werden
 
-                                                   # Funktion simuliert einen A/D-Wandler(Von Noah).
+        # Funktion simuliert einen A/D-Wandler(Von Noah).
 def analog_to_digital_converter():
-    analog_value = random.uniform(0, 5)            # Erzeugt einen zufälligen analogen Wert zwischen 0 und 5 Volt.
-    digital_value = int((analog_value / 5) * 255)  # Konvertiert den analogen Wert in einen digitalen Wert (8-Bit-Auflösung).
+    #Gibt zufälligen Eingangswert (double zwischen -1 bis 5 Volt) aus, um A/D-Converter mit einschließlich nicht plausiblen Werten zu simulieren
+    digital_value = round(random.uniform(-1, 5),2)   
+    
+    if digital_value < 0:        #Prüfung des Messwerts auf Plausibilität
+        digital_value = 0        #Wenn Messwert nicht plausibel, wird auf 0 gesetzt
+    
     return digital_value
 
 
