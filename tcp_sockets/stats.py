@@ -16,26 +16,27 @@ def stat_process():
     stat_socket.listen(1)
     print("Stat-Prozess gestartet und wartet auf Verbindungen...")
     conn, addr = stat_socket.accept()
-    print(f"Verbindung zu {addr} hergestellt.") # addr = Adresse des Clients, der die Verbindung hergestellt hat, addr ein Tupel (client_ip, client_port).
+    print(f"Verbindung von stat zu {addr} hergestellt.") # addr = Adresse des Clients, der die Verbindung hergestellt hat, addr ein Tupel (client_ip, client_port).
 
     #client
     report_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     report_socket.connect((HOST, STAT_PORT))
-    print(f"Verbindung zu stat hergestellt.")
+    print(f"Verbindung von report zu stat hergestellt.")
   
-    summe = 0
-    anzahl = 0
+    total = 0
+    average = 0
+    count = 0
 
     while True:
-        data = conn.recv(8) #nicht nur 4 byte weil float empfangen wird??? oder doch möglich?
+        data = conn.recv(4) #nicht nur 4 byte weil float empfangen wird??? oder doch möglich?
         if not data:
             break
         messwert = struct.unpack('!I', data)[0]
-        summe += messwert
-        anzahl += 1
-        mittelwert = summe / anzahl
-        report_socket.sendall(struct.pack('!f', mittelwert))
-        report_socket.sendall(struct.pack('!d', summe))
+        total += messwert
+        count += 1
+        average = total / count
+        report_socket.sendall(struct.pack('!f', average))
+        report_socket.sendall(struct.pack('!d', total))
 
 if __name__ == '__main__':
     stat_process()

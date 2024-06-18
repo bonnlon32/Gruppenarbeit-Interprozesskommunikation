@@ -1,4 +1,28 @@
-#log_process
-def write_log_datei(digital_value):  # Generierte Werte aus dem conv process müssen weiter gegeben werden
-    with open("log.txt", "a") as f:  # Erstellen,bzw. öffnen der Datei log.txt im Modus append
-        f.write(f"{digital_value}\n") # Schreiben in die Datei in eine neue Zeile
+import random
+import os
+import time
+
+# Behilfscode (random Zahlen) für Test
+def generate_random_number():
+    random_number = random.uniform(-1, 5)
+    return round(random_number, 2)
+
+#Verzeichnis zum Speichern der Datei
+#directory = "/path/to/your/directory"      #für Unix
+directory = "C:\\Users\\noahr\\txtBSRN"     #für Windows
+
+
+filename = os.path.join(directory, "random_numbers.txt")    # Datei, in die die zufälligen Zahlen geschrieben werden sollen
+
+
+
+while True:     # Endlosschleife
+    
+    number = generate_random_number()   #Funktionsaufruf Behilfscode
+    
+    with open(filename, "a") as file:   # Öffnet Datei im Anhangmodus (a = append)
+        file.write(f"{number}\n")
+    
+    print(f"Zufallswert: {number}\t-> In die Datei '{filename}' geschrieben.")
+    
+    time.sleep(1)

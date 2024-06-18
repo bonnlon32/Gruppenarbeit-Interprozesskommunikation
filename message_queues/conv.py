@@ -1,11 +1,25 @@
-#A/D-Converter
 import random
 import time
+#A/D-Converter
+#Synchronisation(!)
+#Binär oder Dezimal -> ist unsere Wahl
 
-def analog_to_digital_converter():         
-    analog_value = random.uniform(0, 5) #Eingangswert (zufällig zwischen 0-5 Volt)
-    #analoger Wert in einen digitalen Wert (8Bit Auflösung)
-    digital_value = int((analog_value /5)*255)
-    print(digital_value) # Ausgabe auf der Konsole
-    time.sleep(0.4)  # Wartezeit, um die Werte in Intervallen zu generieren
+def analog_to_digital_converter():
+    #Gibt zufälligen Eingangswert (double zwischen -1 bis 5 Volt) aus, um A/D-Converter mit einschließlich nicht plausiblen Werten zu simulieren
+    digital_value = round(random.uniform(-1, 5),2)   
+    
+    if digital_value < 0:        #Prüfung des Messwerts auf Plausibilität
+        digital_value = 0        #Wenn Messwert nicht plausibel, wird auf 0 gesetzt
+    
     return digital_value
+    
+
+def main():
+    while True:
+        
+        print("Digitaler Eingangswert:", analog_to_digital_converter())  # Ausgabe und Aufruf des Converters
+        
+        time.sleep(1)
+
+if __name__ == "__main__":
+    main()
