@@ -1,46 +1,62 @@
-# #starten des gesamten prozesses
-# #fork noch einbauen - als kommandozeileneingabe oder fork als duplizieren der prozesse?
-# #signalhandler sigint noch einbauen
-# #fehlerhafte kommandozeilen eingaben abfangen!!
+# # #starten des gesamten prozesses
+# # #fork noch einbauen - als kommandozeileneingabe oder fork als duplizieren der prozesse?
+# # #signalhandler sigint noch einbauen
+# # #fehlerhafte kommandozeilen eingaben abfangen!!
 
-# import sys
-# import signal
+# # import sys
+# # import signal
 
-# # Signalhandler für SIGINT
-# #def signal_handler(sig, frame):
-#     print("Programm wird beendet...")
-#     sys.exit(0)
+# # # Signalhandler für SIGINT
+# # #def signal_handler(sig, frame):
+# #     print("Programm wird beendet...")
+# #     sys.exit(0)
 
-# # Registrieren des Signalhandlers für SIGINT
-# signal.signal(signal.SIGINT, signal_handler)
+# # # Registrieren des Signalhandlers für SIGINT
+# # signal.signal(signal.SIGINT, signal_handler)
 
-# # Einfache Endlosschleife, um das Programm am Laufen zu halten
-# while True:
-#     pass
-
-#  '# Erstellen und Starten der Prozesse
-# from multiprocessing import Process  # Modul zum Erstellen und Verwalten von Prozessen
-
-# from conv import conv_process          # Importiert die Funktion für den A/D-Wandler-Prozess aus der conv Datei
-# from log import log_process            # Importiert die Funktion für den Log-Prozess aus der log Datei
-# from stats import stat_process         # Importiert die Funktion für den Stat-Prozess aus der stat Datei
-# from report import report_process      # Importiert die Funktion für den Report-Prozess aus der report Datei
+# # # Einfache Endlosschleife, um das Programm am Laufen zu halten
+# # while True:
+# #     pass
 
 
-# def main():
-#     processes = [
-#         Process(target=conv_process),   # Erstellen des Prozesses für conv_process
-#         Process(target=log_process),    # Erstellen des Prozesses für log_process
-#         Process(target=stat_process),   # Erstellen des Prozesses für stat_process
-#         Process(target=report_process)  # Erstellen des Prozesses für report_process
-#     ]
+#fork
+import os
+import time
 
-    
-#     for p in processes:
-#         p.start()  # Startet jeden Prozess
-    
-#     for p in processes:
-#         p.join()  # Wartet, bis jeder Prozess beendet ist
+def start_process(script_path):
+    pid = os.fork()
+    if pid == 0:  # Child process
+        os.execvp('python3', ['python3', script_path])
+    else:
+        return pid
 
-# if __name__ == "__main__": # Überprüft, ob das Skript direkt ausgeführt wird
-#     main()                 # Ruft die Hauptfunktion auf
+if __name__ == '__main__':
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    scripts = ['log.py', 'stats.py', 'report.py']
+    processes = []
+
+    for script in scripts:
+        script_path = os.path.join(base_dir, script)
+        if os.path.isfile(script_path):
+            pid = start_process(script_path)
+            processes.append(pid)
+        else:
+            print(f"Error: {script_path} not found")
+
+    # Wartezeit um sicherzustellen, dass alle Serverprozesse laufen
+    time.sleep(3)
+
+    # Starte conv.py Prozess
+    conv_script = os.path.join(base_dir, 'conv.py')
+    if os.path.isfile(conv_script):
+        pid = start_process(conv_script)
+        processes.append(pid)
+    else:
+        print(f"Error: {conv_script} not found")
+
+    # Optional, warte auf alle Prozesse
+    for pid in processes:
+        os.waitpid(pid, 0)
+
+    print("All processes have finished.")
+

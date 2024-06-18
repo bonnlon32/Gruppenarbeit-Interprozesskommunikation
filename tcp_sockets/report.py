@@ -16,7 +16,7 @@ def report_process():
     report_socket.listen(1)    #hey ich höre jetzt auch anderen zu
     print(f"Server listening on {HOST}:{REPORT_PORT}")
     conn, addr = report_socket.accept()   #hey ich seh dich jetzt
-    print(f"Verbindung zu {addr} hergestellt.")
+    print(f"Verbindung von Report zu {addr} hergestellt.")
 
 
     while True:
