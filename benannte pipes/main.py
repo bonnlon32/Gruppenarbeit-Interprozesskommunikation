@@ -21,9 +21,11 @@ def signal_handler(sig, frame):
 # Clean-Funktion erstellen, damit beim beenden die Pipes entfernt werden
 def clean():
     for pipe in [pipe_conv_to_log, pipe_conv_to_stat, pipe_stat_to_report]: # speichert alle drei Pipes in 'pipe'
-        if os.path.exists(pipe):  # Überprüft, ob die Pipe existiert
-            os.unlink(pipe)       # Entfernt die Pipe
-
+        try:
+            if os.path.exists(pipe):  # Überprüft, ob die Pipe existiert
+               os.unlink(pipe)        # Entfernt die Pipe
+        except FileNotFoundError: 
+            pass                      # Wenn die Datei nicht gefunden wird, wird die Ausnahme ignoriert
 
 def main():
     # Erstellt die benannten Pipes, wenn sie nicht existieren
@@ -32,7 +34,7 @@ def main():
             os.mkfifo(pipe)           # Erstellt die Pipe
 
     # Erstellen und Starten der Prozesse
-    processes = [
+    processes = [ # Liste aus den vier Prozessen
         Process(target=conv_process),   # Erstellen des Prozesses für conv_process
         Process(target=log_process),    # Erstellen des Prozesses für log_process
         Process(target=stat_process),   # Erstellen des Prozesses für stat_process
@@ -42,8 +44,16 @@ def main():
     for p in processes:
         p.start()  # Startet jeden Prozess
     
-    for p in processes:
-        p.join()  # Wartet, bis jeder Prozess beendet ist
+    try:
+        # Auf jeden Prozess warten, bis er beendet ist
+        for p in processes: 
+            p.join()           # Blockiert die Ausführung, bis alle Prozesse abgeschlossen sind
+    except KeyboardInterrupt:  # Wenn der Benutzer `Ctrl+C` drückt, unterbrich das Programm
+        print("Programm wurde unterbrochen. Prozesse werden beendet...") 
+        clean()       # Führt die clean-Funktion aus
+        sys.exit(0)   # Beende das Programm mit einem Erfolgscode (0 steht für erfolgreichen Abschluss) 
+
 
 if __name__ == "__main__": # Überprüft, ob das Skript direkt ausgeführt wird
+    signal.signal(signal.SIGINT, signal_handler) # Registriere einen Signalhandler für SIGINT (Ctrl+C), um das Programm zu beenden
     main()                 # Ruft die Hauptfunktion auf
