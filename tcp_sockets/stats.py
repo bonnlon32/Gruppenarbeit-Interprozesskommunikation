@@ -13,7 +13,7 @@ def stat_process():
     stat_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     stat_socket.bind((HOST, STAT_PORT))
     stat_socket.listen(1)
-    print("Stat-Prozess gestartet und wartet auf Verbindungen...")
+    print(f"Stat-Server listening on {HOST}:{STAT_PORT}")
     conn, addr = stat_socket.accept()
     print(f"Verbindung von stat zu {addr} hergestellt.") # addr = Adresse des Clients, der die Verbindung hergestellt hat, addr ein Tupel (client_ip, client_port).
 
@@ -45,7 +45,7 @@ def stat_process():
              report_socket.sendall(data.encode('utf-8') + b'\n')  # Füge ein Newline-Zeichen hinzu
              print(f"Gesendet: {data}")
 
-    conn.close()
+
 
 if __name__ == '__main__':
     stat_process()
