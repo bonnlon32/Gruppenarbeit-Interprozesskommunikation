@@ -25,9 +25,11 @@ def conv_process():
          measuredValue = random.randint(0, 10)  # Zufallszahl als Messwert
          # Messwert senden
          print(measuredValue," Schicke Messwerte 1-10")
-         data = struct.pack('!I', measuredValue)
-         log_socket.sendall(struct.pack(data))
-         stat_socket.sendall(struct.pack(data))
+
+         #struct rauswerfen und als strings verschicken
+         data = str(measuredValue).encode('utf-8')
+         log_socket.sendall(data)
+         stat_socket.sendall(data)
 
          
         #!f steht für einen 4-Byte-Float im Network Byte Order

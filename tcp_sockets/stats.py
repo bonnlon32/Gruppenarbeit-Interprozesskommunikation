@@ -2,7 +2,6 @@
 # enthält client der den mittelwert und summe an report schickt
     
 import socket
-import struct
 
 HOST = "localhost" 
 STAT_PORT = 5003
@@ -27,17 +26,26 @@ def stat_process():
     average = 0
     count = 0
 
+    buffer = b''
     while True:
-        print(" In while True von stats reingekommen")
-        data = conn.recv(4) 
-        if len(data) < 5:
-            break
-        measuredValue = struct.unpack('!I', data)[0]
-        total += measuredValue
-        count += 1
-        average = total / count
-        report_socket.sendall(struct.pack('!f', average)) 
-        report_socket.sendall(struct.pack('!f', total)) 
+            print("In while true Teil von stats gekommen")
+            data = conn.recv(1024)  # Empfange bis zu 1024 Bytes 
+            #fehler prävention
+            # if not data:
+            #          print("not data")
+            #          break
+            buffer += data
+            while b'\n' in buffer:  # Verarbeite alle vollständigen Nachrichten im Puffer
+             line, buffer = buffer.split(b'\n', 1)
+             measuredValue = int(line.decode('utf-8'))  # Wandle die empfangenen Bytes in einen String und dann in einen Integer um
+             total += measuredValue
+             count += 1
+             average = total / count
+             data = f"{total},{average}"  # Summe und Durchschnitt als String mit Komma getrennt
+             report_socket.sendall(data.encode('utf-8') + b'\n')  # Füge ein Newline-Zeichen hinzu
+             print(f"Gesendet: {data}")
+
+    conn.close()
 
 if __name__ == '__main__':
     stat_process()

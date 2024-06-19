@@ -1,6 +1,5 @@
 #server
 import socket
-import struct
 
 HOST = "localhost" 
 LOG_PORT = 5002
@@ -15,18 +14,23 @@ def log_process():
     conn, addr = log_socket.accept()   #hey ich seh dich jetzt
     print(f"Verbindung von log zu {addr} hergestellt.")
    
-
+    buffer = b''
     with open("log.txt", "a") as log: #Öffnet die Datei zum Anhängen und Dateizeiger ans Ende der Datei (Anhangsmodus)
         while True:
             print("In while true Teil von log gekommen")
-            data = conn.recv(4) #Anzahl der Bytes, die aus dem Socket gelesen werden sollen 
+            data = conn.recv(1024)  # Empfange bis zu 1024 Bytes 
             #fehler prävention
-            if len(data) < 4:
-                    print("Received incomplete data")
+            if not data:
+                    print("not data")
                     break
-            measuredValue = struct.unpack('!I', data)  #in binäre form gewandelte daten werden wieder umgewandelt
-            log.write("Der Messwert ist: " + str(measuredValue[0]) + "\n")
-            log.flush()  # Stellt sicher dass die Daten direkt aufgeschrieben werden
+            buffer += data
+            while b'\n' in buffer:  # Verarbeite alle vollständigen Nachrichten im Puffer
+             line, buffer = buffer.split(b'\n', 1)
+             measuredValue = int(line.decode('utf-8'))  # Wandle die empfangenen Bytes in einen String und dann in einen Integer um
+             log.write("Der Messwert ist: " + str(measuredValue[0]) + "\n")
+             log.flush()  # Stellt sicher dass die Daten direkt aufgeschrieben werden
+
+    conn.close()
 
 if __name__ == '__main__':
     log_process()
