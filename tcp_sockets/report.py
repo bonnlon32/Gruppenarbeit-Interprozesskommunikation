@@ -15,13 +15,13 @@ def report_process():
     report_socket.listen(1)    #hey ich höre jetzt auch anderen zu
     print(f"Report-Server listening on {HOST}:{REPORT_PORT}")
     conn, addr = report_socket.accept()   #hey ich seh dich jetzt
-    print(f"Verbindung von Report zu {addr} hergestellt.")
+    
 
 
     
     buffer = b''
     while True:
-            print("In while true Teil von report gekommen")
+            
             data = conn.recv(1024)  # Empfange bis zu 1024 Bytes 
             #fehler prävention
             if not data:

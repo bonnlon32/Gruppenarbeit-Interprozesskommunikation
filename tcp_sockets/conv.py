@@ -19,7 +19,7 @@ def conv_process():
  
      log_socket.connect((HOST, LOG_PORT))
      stat_socket.connect((HOST, STAT_PORT))
-     print(f"Verbindung zu Log und Stat hergestellt.")
+    
 
      while True:
          measuredValue = random.randint(0, 10)  # Zufallszahl als Messwert
@@ -27,7 +27,7 @@ def conv_process():
          data = str(measuredValue).encode('utf-8')
          log_socket.sendall(data + b'\n')
          stat_socket.sendall(data + b'\n')
-         print(measuredValue," Schicke Messwerte 1-10")
+         
         
         #!f steht für einen 4-Byte-Float im Network Byte Order
         #!d steht für einen 8-Byte-Double im Network Byte Order

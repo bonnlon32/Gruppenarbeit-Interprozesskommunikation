@@ -15,12 +15,12 @@ def stat_process():
     stat_socket.listen(1)
     print(f"Stat-Server listening on {HOST}:{STAT_PORT}")
     conn, addr = stat_socket.accept()
-    print(f"Verbindung von stat zu {addr} hergestellt.") # addr = Adresse des Clients, der die Verbindung hergestellt hat, addr ein Tupel (client_ip, client_port).
+     # addr = Adresse des Clients, der die Verbindung hergestellt hat, addr ein Tupel (client_ip, client_port).
 
     #client
     report_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     report_socket.connect((HOST, REPORT_PORT))
-    print(f"Verbindung von report zu stat hergestellt.")
+    
   
     total = 0
     average = 0
@@ -28,7 +28,7 @@ def stat_process():
 
     buffer = b''
     while True:
-            print("In while true Teil von stats gekommen")
+           
             data = conn.recv(1024)  # Empfange bis zu 1024 Bytes 
             #fehler prävention
     
