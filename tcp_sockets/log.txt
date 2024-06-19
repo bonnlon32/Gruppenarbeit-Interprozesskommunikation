@@ -1,0 +1,2 @@
+Der Messwert ist: 6
+Der Messwert ist: 5

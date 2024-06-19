@@ -21,16 +21,14 @@ def log_process():
             data = conn.recv(1024)  # Empfange bis zu 1024 Bytes 
             #fehler prävention
             if not data:
-                    print("not data")
+                    print("Keine Daten empfangen, Verbindung wird geschlossen.")
                     break
             buffer += data
             while b'\n' in buffer:  # Verarbeite alle vollständigen Nachrichten im Puffer
              line, buffer = buffer.split(b'\n', 1)
              measuredValue = int(line.decode('utf-8'))  # Wandle die empfangenen Bytes in einen String und dann in einen Integer um
-             log.write("Der Messwert ist: " + str(measuredValue[0]) + "\n")
+             log.write(f"Der Messwert ist: {measuredValue}\n")
              log.flush()  # Stellt sicher dass die Daten direkt aufgeschrieben werden
-
-    conn.close()
-
+             
 if __name__ == '__main__':
     log_process()
