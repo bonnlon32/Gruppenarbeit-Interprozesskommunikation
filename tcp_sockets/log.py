@@ -18,8 +18,8 @@ def log_process():
 
     with open("log.txt", "a") as log: #Öffnet die Datei zum Anhängen und Dateizeiger ans Ende der Datei (Anhangsmodus)
         while True:
+            print("In while true Teil von log gekommen")
             data = conn.recv(4) #Anzahl der Bytes, die aus dem Socket gelesen werden sollen 
-           
             #fehler prävention
             if len(data) < 4:
                     print("Received incomplete data")

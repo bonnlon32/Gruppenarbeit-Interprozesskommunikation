@@ -24,8 +24,16 @@ def conv_process():
      while True:
          measuredValue = random.randint(0, 10)  # Zufallszahl als Messwert
          # Messwert senden
-         log_socket.sendall(struct.pack('!I', measuredValue))
-         stat_socket.sendall(struct.pack('!I', measuredValue))
+         print(measuredValue," Schicke Messwerte 1-10")
+         data = struct.pack('!I', measuredValue)
+         log_socket.sendall(struct.pack(data))
+         stat_socket.sendall(struct.pack(data))
+
+         
+        #!f steht für einen 4-Byte-Float im Network Byte Order
+        #!d steht für einen 8-Byte-Double im Network Byte Order
+        #!I steht für einen 4-Byte-Unsigned-Integer im Network Byte Order
+
 
          time.sleep(1)  # Wartezeit zwischen den Messungen
 

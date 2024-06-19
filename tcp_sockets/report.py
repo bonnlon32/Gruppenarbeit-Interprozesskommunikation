@@ -20,11 +20,12 @@ def report_process():
 
 
     while True:
+        print("In while True teil von report gekommen")
         data = conn.recv(12)
         if not data:
             break
         average = struct.unpack('!f', data[:4]) #[0]
-        total = struct.unpack('!d', data[4:])
+        total = struct.unpack('!f', data[4:])
 
         #!f steht für einen 4-Byte-Float im Network Byte Order
         #!d steht für einen 8-Byte-Double im Network Byte Order
