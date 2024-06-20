@@ -20,7 +20,6 @@ def stat_process():
     #client
     report_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     report_socket.connect((HOST, REPORT_PORT))
-    
   
     total = 0
     average = 0
@@ -44,7 +43,7 @@ def stat_process():
              average = total / count
              data = f"{total},{average}"  # Summe und Durchschnitt als String mit Komma getrennt
              report_socket.sendall(data.encode('utf-8') + b'\n')  # Füge ein Newline-Zeichen hinzu
-             print(f"Gesendet: {data}")
+        
 
 
 if __name__ == '__main__':
