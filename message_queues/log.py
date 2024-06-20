@@ -14,15 +14,19 @@ directory = "C:\\Users\\noahr\\txtBSRN"     #für Windows
 
 filename = os.path.join(directory, "random_numbers.txt")    # Datei, in die die zufälligen Zahlen geschrieben werden sollen
 
+def main():
+
+    while True:     # Endlosschleife
+        
+        number = generate_random_number()   #Funktionsaufruf Behilfscode
+        
+        with open(filename, "a") as file:   # Öffnet Datei im Anhangmodus (a = append)
+            file.write(f"{number}\n")
+        
+        print(f"Zufallswert: {number}\t-> In die Datei '{filename}' geschrieben.") #Ausgabe
+        
+        time.sleep(1)
 
 
-while True:     # Endlosschleife
-    
-    number = generate_random_number()   #Funktionsaufruf Behilfscode
-    
-    with open(filename, "a") as file:   # Öffnet Datei im Anhangmodus (a = append)
-        file.write(f"{number}\n")
-    
-    print(f"Zufallswert: {number}\t-> In die Datei '{filename}' geschrieben.")
-    
-    time.sleep(1)
+if __name__ == "__main__":
+    main()
