@@ -1,27 +1,21 @@
-# # #starten des gesamten prozesses
-# # #fork noch einbauen - als kommandozeileneingabe oder fork als duplizieren der prozesse?
-# # #signalhandler sigint noch einbauen
-# # #fehlerhafte kommandozeilen eingaben abfangen!!
-
-# import sys
-# import signal
-
-# # Signalhandler für SIGINT
-# #def signal_handler(sig, frame):
-#     print("Programm wird beendet...")
-#     sys.exit(0)
-
-# # Registrieren des Signalhandlers für SIGINT
-# signal.signal(signal.SIGINT, signal_handler)
-
-# # Einfache Endlosschleife, um das Programm am Laufen zu halten
-# while True:
-#     pass
-
+#fehlerhafte kommandozeilen eingaben abfangen!!
+#noch mehr kommentiert
 
 #fork
 import os # Importiert das Betriebssystem-Modul, das für das Arbeiten mit Prozessen und Pfaden verwendet wird
 import time # Importiert das Zeit-Modul, um Pausen und Wartezeiten zu ermöglichen
+import signal
+import sys
+
+# Signal-Handler-Funktion
+def signal_handler(sig, frame):
+    print(' Control-C received and programm is closing...')
+    # Fügen Sie hier die Logik zum Schließen aller Sockets und Threads hinzu
+    sys.exit(0)
+
+# Signal-Handler registrieren
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
 
 
 def start_process(script_path):
@@ -60,5 +54,5 @@ if __name__ == '__main__':  # Überprüft, ob das Skript direkt ausgeführt wird
     for pid in processes:  # Schleife über jede Prozess-ID in der Prozesse-Liste
         os.waitpid(pid, 0) # Wartet, bis der Prozess mit der angegebenen Prozess-ID beendet ist
 
-    print("All processes have finished.") 
+   
 
