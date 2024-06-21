@@ -2,7 +2,6 @@
 # enthält client der den mittelwert und summe an report schickt
     
 import socket
-import struct
 
 HOST = "localhost" 
 STAT_PORT = 5003
@@ -14,28 +13,38 @@ def stat_process():
     stat_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     stat_socket.bind((HOST, STAT_PORT))
     stat_socket.listen(1)
-    print("Stat-Prozess gestartet und wartet auf Verbindungen...")
+    print(f"Stat-Server listening on {HOST}:{STAT_PORT}")
     conn, addr = stat_socket.accept()
-    print(f"Verbindung zu {addr} hergestellt.") # addr = Adresse des Clients, der die Verbindung hergestellt hat, addr ein Tupel (client_ip, client_port).
+     # addr = Adresse des Clients, der die Verbindung hergestellt hat, addr ein Tupel (client_ip, client_port).
 
     #client
     report_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    report_socket.connect((HOST, STAT_PORT))
-    print(f"Verbindung zu stat hergestellt.")
+    report_socket.connect((HOST, REPORT_PORT))
   
     total = 0
     average = 0
+    count = 0
 
+    buffer = b''
     while True:
-        data = conn.recv(4) #nicht nur 4 byte weil float empfangen wird??? oder doch möglich?
-        if not data:
-            break
-        messwert = struct.unpack('!I', data)[0]
-        total += messwert
-        count += 1
-        average = total / count
-        report_socket.sendall(struct.pack('!f', average))
-        report_socket.sendall(struct.pack('!d', total))
+           
+            data = conn.recv(1024)  # Empfange bis zu 1024 Bytes 
+            #fehler prävention
+    
+            buffer += data
+            while b'\n' in buffer:  # Verarbeite alle vollständigen Nachrichten im Puffer
+             line, buffer = buffer.split(b'\n', 1)
+             measuredValue = int(line.decode('utf-8'))  # Wandle die empfangenen Bytes in einen String und dann in einen Integer um
+             if not measuredValue:
+                     print("not measuredValue")
+                     break
+             total += measuredValue
+             count += 1
+             average = total / count
+             data = f"{total},{average}"  # Summe und Durchschnitt als String mit Komma getrennt
+             report_socket.sendall(data.encode('utf-8') + b'\n')  # Füge ein Newline-Zeichen hinzu
+        
+
 
 if __name__ == '__main__':
     stat_process()
