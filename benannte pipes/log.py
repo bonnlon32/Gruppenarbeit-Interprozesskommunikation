@@ -2,14 +2,14 @@ import os
 import time
 
 def log_process():
-     pipe_log = '/tmp/conv_to_log'  # Der Pfad zur benannten Pipe für den Log-Prozess
-     log_file = 'log.txt'           # Datei, in die die Werte geschrieben werden
+     pipe_log = '/tmp/conv_to_log'            # Der Pfad zur benannten Pipe für den Log-Prozess
+     log_file = 'log.txt'                     # Datei, in die die Werte geschrieben werden
      
-     if not os.path.exists(pipe_log): # Überprüft, ob die benannte Pipe existiert, wenn nicht:
-        os.mkfifo(pipe_log)           # wird hiermit die benannte Pipe erstellt
+     if not os.path.exists(pipe_log):         # Überprüft, ob die benannte Pipe existiert, wenn nicht:
+        os.mkfifo(pipe_log)                   # wird hiermit die benannte Pipe erstellt
 
-     fifo_log = open(pipe_log, 'r')   # Öffnet die Pipe zum auslesen
-     log = open(log_file, 'a')        # Öffnet die Log-Datei zum schreiben
+     fifo_log = open(pipe_log, 'r')           # Öffnet die Pipe zum auslesen
+     log = open(log_file, 'a')                # Öffnet die Log-Datei zum schreiben
 
      while True:                              # Unendlichschleife erstellen
         value = fifo_log.readline().strip()   # liest eine Zeile aus der Pipe ein und speichert sie in value
