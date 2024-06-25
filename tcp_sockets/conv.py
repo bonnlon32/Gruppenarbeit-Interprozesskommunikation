@@ -1,4 +1,4 @@
-#client
+#enthält client der random Zahlen zwischen 1-10 an stats und log schickt
 
 import random #für random zahl
 import time #für 1 sek abstände
@@ -23,15 +23,10 @@ def conv_process():
 
      while True:
          measuredValue = random.randint(0, 10)  # Zufallszahl als Messwert
-         # Messwert senden
+         # Messwert als String und Zeilenumbruch senden
          data = str(measuredValue).encode('utf-8')
          log_socket.sendall(data + b'\n')
          stat_socket.sendall(data + b'\n')
-         
-        
-        #!f steht für einen 4-Byte-Float im Network Byte Order
-        #!d steht für einen 8-Byte-Double im Network Byte Order
-        #!I steht für einen 4-Byte-Unsigned-Integer im Network Byte Order
 
          time.sleep(1)  # Wartezeit zwischen den Messungen
 

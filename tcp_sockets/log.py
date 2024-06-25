@@ -1,4 +1,4 @@
-#server
+#enthält server der random zahlen empfängt und in log.txt schreibt
 import socket
 
 HOST = "localhost" 
