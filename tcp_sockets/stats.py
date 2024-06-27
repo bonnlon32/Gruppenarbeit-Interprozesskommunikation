@@ -1,7 +1,7 @@
-#enthält server der zuhört und zahlen von conv bekommt
+# enthält server der zuhört und zahlen von conv bekommt
 # enthält client der den mittelwert und summe an report schickt
     
-import socket
+import socket  #zur Erstellung von Sockets
 
 HOST = "localhost" 
 STAT_PORT = 5003
@@ -20,31 +20,35 @@ def stat_process():
     #client
     report_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     report_socket.connect((HOST, REPORT_PORT))
-  
+
+    #konstanten zuweisung
     total = 0
     average = 0
     count = 0
 
-    buffer = b''
+    buffer = b'' #Erstellen buffer und fügen unsere Daten dort hinzu 
     while True:
            
             data = conn.recv(1024)  # Empfange bis zu 1024 Bytes 
-            #fehler prävention
-    
             buffer += data
             while b'\n' in buffer:  # Verarbeite alle vollständigen Nachrichten im Puffer
-             line, buffer = buffer.split(b'\n', 1)
+             line, buffer = buffer.split(b'\n', 1)      #extrahiert diese vollständige Nachricht bis zum ersten \n 
+                                                        #und lässt den Rest der Daten im Buffer
+
              measuredValue = int(line.decode('utf-8'))  # Wandle die empfangenen Bytes in einen String und dann in einen Integer um
+            #fehler prävention
              if not measuredValue:
                      print("not measuredValue")
                      break
-             total += measuredValue
+             #Ausgabe des random Messwertes
+             print("Der Messwert ist ", measuredValue)
+             #Berechnung Summe und Mittelwert
+             total += round(measuredValue,2)    #Rundung auf zwei Nachkommastellen
              count += 1
-             average = total / count
+             average = round(total / count,2)
              data = f"{total},{average}"  # Summe und Durchschnitt als String mit Komma getrennt
              report_socket.sendall(data.encode('utf-8') + b'\n')  # Füge ein Newline-Zeichen hinzu
         
-
-
+#damit wir den stats_process auch in der main starten können
 if __name__ == '__main__':
     stat_process()

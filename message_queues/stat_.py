@@ -9,7 +9,7 @@ def generate_random_number():
 
 
 
-def main():
+def stat_process():
 
     avrg = 0.0
     sum = 0.0
@@ -27,10 +27,4 @@ def main():
         print("Summe: ", round(sum,2))
         print("Mittelwert: ", round(avrg,2))
 
-        time.sleep(0.2)
-        
-
-
-
-if __name__ == "__main__":
-    main()
+        time.sleep(1)

@@ -1,4 +1,4 @@
-#server
+#enthält server der random zahlen empfängt und in log.txt schreibt
 import socket
 
 HOST = "localhost" 
@@ -14,9 +14,10 @@ def log_process():
     conn, addr = log_socket.accept()   #hey ich seh dich jetzt
     
    
-    buffer = b''
+    buffer = b''  #buffer zum sammeln aller Daten, da bei tcp sockets oft daten in teilen empfangen werden
     with open("log.txt", "a") as log: #Öffnet die Datei zum Anhängen und Dateizeiger ans Ende der Datei (Anhangsmodus)
-        while True:
+       
+         while True: #mindestens eine vollständige Nachricht im Buffer ist (endet mit \n)
             
             data = conn.recv(1024)  # Empfange bis zu 1024 Bytes 
             #fehler prävention
@@ -25,10 +26,13 @@ def log_process():
                     break
             buffer += data
             while b'\n' in buffer:  # Verarbeite alle vollständigen Nachrichten im Puffer
-             line, buffer = buffer.split(b'\n', 1)
+             line, buffer = buffer.split(b'\n', 1)   #extrahiert diese vollständige Nachricht bis zum ersten \n 
+                                                     #und lässt den Rest der Daten im Buffer
+                                                     
              measuredValue = int(line.decode('utf-8'))  # Wandle die empfangenen Bytes in einen String und dann in einen Integer um
              log.write(f"Der Messwert ist: {measuredValue}\n")
              log.flush()  # Stellt sicher dass die Daten direkt aufgeschrieben werden
 
+#damit wir den log_process auch in der main starten können
 if __name__ == '__main__':
     log_process()
