@@ -48,14 +48,11 @@ def main():
         start_process(report_process)                                          # Erstellen und Starten des Prozesses für report_process
     ]
     
-    try:
-                                                                               # Auf jeden Prozess warten, bis er beendet ist
-        for pid in processes: 
+    
+    for pid in processes: 
             os.waitpid(pid, 0)                                                 # Wartet, bis der Prozess mit der angegebenen Prozess-ID beendet ist
-    except KeyboardInterrupt:                                                  # Wenn der Benutzer `Ctrl+C` drückt, unterbrich das Programm
-        print("Programm wurde unterbrochen. Prozesse werden beendet...") 
-        clean()                                                                # Führt die clean-Funktion aus
-        sys.exit(0)                                                            # Beendet das Programm mit einem Erfolgscode (0 steht für erfolgreichen Abschluss)
+    
+
 
 if __name__ == "__main__":                                                     # Überprüft, ob das Skript direkt ausgeführt wird
     signal.signal(signal.SIGINT, signal_handler)                               # Registriert einen Signalhandler für SIGINT (Ctrl+C), um das Programm zu beenden
