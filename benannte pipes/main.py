@@ -48,14 +48,10 @@ def main():
         start_process(report_process)                                          # Erstellen und Starten des Prozesses für report_process
     ]
     
-    try:
-                                                                               # Auf jeden Prozess warten, bis er beendet ist
-        for pid in processes: 
+    
+    for pid in processes: 
             os.waitpid(pid, 0)                                                 # Wartet, bis der Prozess mit der angegebenen Prozess-ID beendet ist
-    except Exception as e:                                                     # Fängt alle anderen Ausnahmen ab
-        print(f"Ein Fehler ist aufgetreten: {e}")
-        clean()                                                                # Führt die clean-Funktion aus
-        sys.exit(1)                                                            # Beendet das Programm mit einem Fehlercode
+    
 
 
 if __name__ == "__main__":                                                     # Überprüft, ob das Skript direkt ausgeführt wird
