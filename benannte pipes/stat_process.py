@@ -21,13 +21,13 @@ def stat_process():
                     try:
                         #print(value, "eingelesener wert aus der pipe")                 Test zum schauen, was ohne Umwandlung aus der Pipe kommt
                         zahltemp = float(value)                                       # Versucht, den gelesenen Wert in eine Gleitkommazahl umzuwandeln
-                        zahl = round(zahltemp, 2)                                     # Rundet den gelesenen Wert auf zwei Nachkommastellen
+                        summe = round(zahltemp, 2)                                     # Rundet den gelesenen Wert auf zwei Nachkommastellen
                         #print(zahl, "umgewandelter wert als float in stat")            Test zum kontrollieren ob Zahlen richtig auselesen wurden
-                        summenwerttemp += zahl                                        # Addiert den gelesenen Wert zur Summe summenwert
+                        summenwerttemp += summe                                        # Addiert den gelesenen Wert zur Summe summenwert
                         summenwert = round(summenwerttemp, 2)                         # Rundet den Summenwert auf zwei Nachkommastellen
                         #print(summenwert, " Ergebnis der Addition in stat")            Test zum kontrollieren, ob Zahlen richtig gerundet wurden
                         anzahl += 1                                                   # Erhöht die Anzahl der gelesenen Werte, um den Durchschnitt zu berechnen
-                        durchschnitttemp = summenwert / anzahl                        # Berechnet den Durchschnitt aus der Summe und der Anzahl, wenn Anzahl > 0, sonst 0
+                        durchschnitttemp = summenwert / anzahl                        # Berechnet den Durchschnitt aus der Summe und der Anzahl
                         summeString = str(summenwert)                                 # Die Summe wird als String gespeichert, bevor sie durch die Pipe geschickt wird
                         durchschnitt = round(durchschnitttemp, 2)            
                         durchschnittString = str(durchschnitt)

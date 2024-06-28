@@ -1,13 +1,17 @@
-import random
+import random # Modul zur Generierung von Zahlen 
 import time
 import mmap 
 
 SHM_CONV_LOG_NAME = "/shared_memory_conv_log"
 
 def analog_to_digital_converter():         
-    analog_value = random.uniform(0, 5)  # Eingangswert (zufällig zwischen 0-5 Volt)
-    digital_value = int((analog_value / 5) * 255)  # analoger Wert in einen digitalen Wert (8Bit Auflösung)
+     #Gibt zufälligen Eingangswert (double zwischen -1 bis 5 Volt) aus, um A/D-Converter mit einschließlich nicht plausiblen Werten zu simulieren
+    digital_value = random.randint(-1, 10)  # Range der Zahlen kann beliebig angepasst werden 
+    print(digital_value)
+    if digital_value < 0:                                                              # Prüfung des Messwerts auf Plausibilität
+        digital_value = 0                                                              # Wenn Messwert nicht plausibel, wird auf 0 gesetzt
     return digital_value
+
 
 def conv_process(shm_conv_log, shm_conv_stat,semaphore_conv_log, semaphore_conv_stat):
     
