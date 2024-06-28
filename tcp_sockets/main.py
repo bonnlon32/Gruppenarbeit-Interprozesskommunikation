@@ -9,8 +9,9 @@ import sys
 
 # Signal-Handler-Funktion
 def signal_handler(sig, frame):
-    print(' Control-C received and programm is closing...')
-    # Fügen Sie hier die Logik zum Schließen aller Sockets und Threads hinzu
+    print('Control-C received and program is closing...')
+    for pid in processes:
+        os.kill(pid, signal.SIGTERM)
     sys.exit(0)
 
 # Signal-Handler registrieren
@@ -50,9 +51,11 @@ if __name__ == '__main__':  # Überprüft, ob Skript direkt ausgeführt wird
     else:
         print(f"Error: {conv_script} not found") # Gibt Fehlermeldung aus, wenn 'conv.py' nicht gefunden wird
 
-    # Optional, warte auf alle Prozesse
-    for pid in processes:  # Schleife über jede Prozess-ID in der Prozesse-Liste
-        os.waitpid(pid, 0) # Wartet, bis Prozess mit der angegebenen Prozess-ID beendet ist
-
+      # Warte auf alle Prozesse
+    try:
+        for pid in processes:
+            os.waitpid(pid, 0)
+    except KeyboardInterrupt:
+        signal_handler(signal.SIGINT, None)
    
 
