@@ -18,8 +18,8 @@ def report_process():
 
 
     
-    buffer = b''
-    while True:
+    buffer = b''     #buffer zum sammeln aller Daten, da bei tcp sockets oft daten in teilen empfangen werden
+    while True:      #mindestens eine vollständige Nachricht im Buffer ist (endet mit \n)
             
             data = conn.recv(1024)  # Empfange bis zu 1024 Bytes 
             #fehler prävention
@@ -28,9 +28,11 @@ def report_process():
                     break
             buffer += data
             while b'\n' in buffer:  # Verarbeite alle vollständigen Nachrichten im Puffer
-             line, buffer = buffer.split(b'\n', 1)
+             line, buffer = buffer.split(b'\n', 1)  #extrahiert diese vollständige Nachricht bis zum ersten \n 
+                                                    #und lässt den Rest der Daten im Buffer
+                                                         
              total_str, average_str = line.decode('utf-8').split(',')  # Trenne Summe und Durchschnitt
-             total = float(total_str)
+             total = float(total_str)   #typecasting in float
              average = float(average_str)
 
              #Ausgabe der Endergebnisse 
@@ -39,5 +41,6 @@ def report_process():
     #Pausierung des Prozesses für eine Sekunde
     time.sleep(1)
 
+#damit wir den report_process auch in der main starten können
 if __name__ == '__main__':
     report_process()
