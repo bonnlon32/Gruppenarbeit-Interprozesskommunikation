@@ -20,3 +20,5 @@ Der Messwert ist: 3
 Der Messwert ist: 0
 Der Messwert ist: 10
 Der Messwert ist: 10
+Der Messwert ist: 7
+Der Messwert ist: 0

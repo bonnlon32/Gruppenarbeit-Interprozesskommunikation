@@ -69,7 +69,6 @@ def signal_handler(sig, frame):
     global shutting_down
     if not shutting_down:
         shutting_down = True
-        #print('Control-C received and program is closing...')
         if stat_socket:
             stat_socket.close()
         if report_socket:

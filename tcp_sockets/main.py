@@ -1,7 +1,5 @@
-#fehlerhafte kommandozeilen eingaben abfangen!!
-#noch mehr kommentiert
+#enthält signal handler und fork um alle Prozesse gleichzeitig zu starten
 
-#fork
 import os # Importiert das Betriebssystem-Modul, das für das Arbeiten mit Prozessen und Pfaden verwendet wird
 import time # Importiert das Zeit-Modul, um Pausen und Wartezeiten zu ermöglichen
 import signal

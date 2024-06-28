@@ -6,8 +6,6 @@ import socket #für erstellung der sockets
 import signal
 import sys
 
-
-# Konstanten für Host und Ports (wohin?? hier rein oder main?)
 HOST = "localhost" #localhost adresse (lokal auf dem betriebssystem ohne das netzwerk zu verlassen)
 LOG_PORT = 5002
 STAT_PORT = 5003  #beliebige zahl, nur manche adressen sind reserviert
@@ -50,7 +48,6 @@ def signal_handler(sig, frame):
     global shutting_down
     if not shutting_down:
         shutting_down = True
-        #print('Control-C received and program is closing...')
         if log_socket:
             log_socket.close()
         if stat_socket:

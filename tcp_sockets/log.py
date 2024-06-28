@@ -1,4 +1,5 @@
 #enthält server der random zahlen empfängt und in log.txt schreibt
+
 import socket
 import signal
 import sys
@@ -50,7 +51,6 @@ def signal_handler(sig, frame):
     global shutting_down
     if not shutting_down:
         shutting_down = True
-        #print('Control-C received and program is closing...')
         if log_socket:
             log_socket.close()
         sys.exit(0)
