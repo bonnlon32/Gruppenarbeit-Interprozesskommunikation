@@ -1,15 +1,10 @@
-import random
 import time
 #berechnet Mittelwert und Summe aus Conv
 
-# Behilfscode (random Zahlen) für Test
-def generate_random_number():
-    random_number = random.uniform(-1, 5)
-    return round(random_number, 2)
 
+def stat_process(mqToReport, mqToStat):
 
-
-def stat_process():
+    print("- - - STAT_-PROZESS\t GESTARTET - - -")
 
     avrg = 0.0
     sum = 0.0
@@ -18,13 +13,20 @@ def stat_process():
     
     while True:
 
-        count+=1
-        num = generate_random_number()  #Ausgabe random Zahl
-        sum += num                      #Berechnung Summe
-        avrg = sum/count                #Berechnung Mittelwert
+        message, priorität = mqToStat.receive()      # Empfangen der Nachricht, speichern der Prio sepperat
+        num = float(message.decode())                # Konvertierung von Byte zu String zu float
 
-        #rundet und gibt aus
-        print("Summe: ", round(sum,2))
-        print("Mittelwert: ", round(avrg,2))
+        count+=1
+
+        sum += num                                  # Berechnung Summe
+        avrg = sum/count                            # Berechnung Mittelwert
+
+        sumString = str(sum)
+        avrgString = str(avrg)
+
+        messageSum = sumString.encode()             # Konvertierung Nachricht in Bytes
+        messageAvrg = avrgString.encode()
+        mqToReport.send(messageSum)                 # Sendet Nachricht zu ReportSUM
+        mqToReport.send(messageAvrg)                # Sendet Nachricht zu ReportAVRG
 
         time.sleep(1)

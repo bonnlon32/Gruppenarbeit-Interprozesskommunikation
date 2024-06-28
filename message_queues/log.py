@@ -2,23 +2,26 @@ import random
 import os
 import time
 
-def log_process():
+def log_process(mqToLog):
+    
+    print("- - - LOG-PROZESS\t GESTARTET - - -")
 
-    filename = "random_numbers.txt"    # Dateiname, in die die zufälligen Zahlen geschrieben werden sollen
+    filename = "random_numbers.txt"                     # Dateiname, in die die zufälligen Zahlen geschrieben werden sollen
 
-    while True:     # Endlosschleife
-        
-        digital_num = generate_random_number()   #Funktionsaufruf Behilfscode
-        
-        with open(filename, "a") as file:   # Öffnet Datei im Anhangmodus (a = append)
-            file.write(f"{digital_num}\n")
-        
-        print(f"Zufallswert: {digital_num}\t-> In die Datei '{filename}' geschrieben.") #Ausgabe
-        
-        time.sleep(1)
+    try:
 
+        while True:                                     # Endlosschleife von Conv
+            time.sleep(1)
 
-# Behilfscode (random Zahlen) für Test
-def generate_random_number():
-    random_number = random.uniform(-1, 10)
-    return round(random_number, 2)
+            message, priorität = mqToLog.receive()      # Empfangen der Nachricht, speichern der Prio sepperat #(b'Zahl',0) b = bytes, String, priorität >> 0 = Standard
+            message = message.decode()                  # Konvertierung von Byte
+                              
+            digital_num = message                       
+            with open(filename, "a") as file:           # Öffnet Datei im Anhangmodus (a = append)
+                file.write(f"{digital_num}\n")
+            print(f"LOG Zufallswert: {digital_num}\t-> In die Datei '{filename}' geschrieben.") # Ausgabe
+            
+            time.sleep(1.5)
+
+    except KeyboardInterrupt:
+        pass
