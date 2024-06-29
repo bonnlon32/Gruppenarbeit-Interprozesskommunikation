@@ -23,10 +23,9 @@ mqToReport = posix_ipc.MessageQueue(STAT_TO_REPORT_QUEUE, posix_ipc.O_CREAT)    
 child_pids = [] # Array um alle PIDs der Kindprozesse zu speichern -> für SignalHandler
 
 
+
 def signal_handler(sig, frame):                 # Signal Handler für Ctrl + C Interrupt
     print("Signal zum Beenden empfangen")
-                                                
-
     for pid in child_pids:
         os.kill(pid, signal.SIGTERM)            # Endet alle Forks/Kindprozesse
     mq_cleaner()                                # Entsorgt die MessageQueues
@@ -34,28 +33,14 @@ def signal_handler(sig, frame):                 # Signal Handler für Ctrl + C I
     print("Elternprozess wird beendet")
     sys.exit(0)                                 # beendet main
 
-def mq_cleaner():                       # Leert und schließt die MessageQueues
-    mq_flush(mqToLog)
-    mq_flush(mqToStat)
-    mq_flush(mqToReport)
+def mq_cleaner():                       # Schließt & leert die MessageQueues
     mqToLog.close()                     # Schließt alle Queues
     mqToStat.close()                    
     mqToReport.close()
     mqToLog.unlink()                    # Löscht alle Queues
     mqToStat.unlink()
     mqToReport.unlink()
-    print("Alle Queues Flushed & Closed & Deleted ")
-
-
-def mq_flush(mq):                       # Leert die MessageQueues
-    while True:
-        try:
-            mq.receive(timeout=0)       # Empfängt Nachricht, aber blockiert nicht
-        except posix_ipc.BusyError:
-            break                       # Wenn keine Nachrichten mehr, beendet Schleife
-        except posix_ipc.Error as e:
-            print("Fehler beim Flush der Message Queue")
-            break
+    print("Alle Queues Flushed, Closed & Deleted ")
 
 if __name__ == "__main__":                  
 
@@ -79,26 +64,32 @@ if __name__ == "__main__":
 
             # Startet Funktion mit Übergabe von Queues
             if (selected_process == conv_process):
+                print("- - - CONV-PROZESS\t GESTARTET - - -")
                 selected_process(mqToStat, mqToLog)
+                
             elif(selected_process == log_process):
+                print("- - - LOG-PROZESS\t GESTARTET - - -")
                 selected_process(mqToLog)
+
             elif(selected_process == report_process):
+                print("- - - REPORT-PROZESS\t GESTARTET - - -")
                 selected_process(mqToReport)
+
             elif(selected_process == stat_process):
+                print("- - - STAT_-PROZESS\t GESTARTET - - -")
                 selected_process(mqToReport, mqToStat)
 
 
         elif pid > 0:                                               # Sollte nur in Elernprozess starten, da pid>0
-            print("Kindprozess ",i+1," mit PID ",pid," gestartet")  # Gibt Status aus
+            print("Kindprozess ",i+1," mit PID ", pid," gestartet")
             child_pids.append(pid)                                  # Speichert PID von Kindprozess in Array
 
         else:                                                       # Wenn Fork fehlschlägt (pid = -1)
             print("Fork für Kindprozess", i+1 ," Fehlgeschlagen")   
-            sys.exit(1)                                             # beendet Programm
+            sys.exit(0)                                             # beendet Programm
 
     signal.signal(signal.SIGINT, signal_handler)                    # Aufruf SignalHandler
 
     for _ in range(len(processes)):                                 # wartet bis alle Kindprozesse geendet sind, damit signalHandler funktioniert und main weiter läuft
         print("warte auf Beendung von Kindprozesse")
-        os.wait()                       
-     
+        os.wait()    
