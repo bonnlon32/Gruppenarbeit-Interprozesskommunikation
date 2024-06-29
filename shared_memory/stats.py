@@ -1,4 +1,4 @@
-import mmap
+import mmap # ermöglicht  direkten Zugriff auf Dateien im Speicher
 
 def calculate_stats(zahlen_liste):
     calc_sum = sum(zahlen_liste)
@@ -8,9 +8,7 @@ def calculate_stats(zahlen_liste):
 
 def stat_process(shm_conv_stat, semaphore_conv_stat, shm_stat_report, semaphore_stat_report):
     SHM_SIZE = 1024
-    # Statistik-Prozess: Daten aus Shared Memory lesen, Statistiken berechnen und in Shared Memory schreiben
-    zahlen_liste = []  # Liste für die Zahlen aus dem Shared Memory
-    
+    zahlen_liste = []  # Liste für die Zahlen aus dem Shared Memory, da zwei Werte übergeben werden
     while True:
         semaphore_conv_stat.acquire()  # Warten auf Freigabe der Semaphore
         with mmap.mmap(shm_conv_stat.fd, SHM_SIZE, access=mmap.ACCESS_READ) as mapfile:
@@ -22,7 +20,7 @@ def stat_process(shm_conv_stat, semaphore_conv_stat, shm_stat_report, semaphore_
         except ValueError as e:
             print(f"Fehler beim Konvertieren der Daten zu Zahlen: {e}")
             continue  # Bei Fehler die Schleife überspringen
-        
+
         zahlen_liste.extend(new_numbers)  # Neue Zahlen zur Liste hinzufügen
         
         if zahlen_liste:  # Wenn Zahlen vorhanden sind, Statistiken berechnen
@@ -30,7 +28,7 @@ def stat_process(shm_conv_stat, semaphore_conv_stat, shm_stat_report, semaphore_
         else:
             summenwert, durchschnitt = 0, 0  # Falls keine Zahlen vorhanden sind, Standardwerte verwenden
         
-        # Statistiken in das Report-Prozess-Segment schreiben
+        # Statistiken in das Report-Prozess-Segment schreiben:
         with mmap.mmap(shm_stat_report.fd, SHM_SIZE,access=mmap.ACCESS_WRITE) as mapfile:
             mapfile.seek(0)
             mapfile.write(f"{summenwert} {durchschnitt}".encode().ljust(SHM_SIZE))  # Daten schreiben und auffüllen
