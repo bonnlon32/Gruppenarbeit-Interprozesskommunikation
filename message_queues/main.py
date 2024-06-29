@@ -1,5 +1,4 @@
 import os
-import time
 import signal
 import sys
 import posix_ipc
@@ -15,34 +14,48 @@ CONV_TO_LOG_QUEUE = "/conv_to_log_queue"
 CONV_TO_STAT_QUEUE = "/conv_to_stat_queue"
 STAT_TO_REPORT_QUEUE = "/stat_to_report_queue"
 
-#TestCode
-#MAX_MESSAGES = 10       #Maximale Nachrichten in der Queue
-#MAX_MESSAGE_SIZE = 1024  #Maximale Größe der Nachrichten in Bytes
-#attributes.mq_maxmsg = MAX_MESSAGES
-#attributes.mq_msgsize = MAX_MESSAGE_SIZE
-#mqToLog.mq_setattr(attributes)
 
 # Erstellung der MessageQueue und Einstellung der Attribute
 mqToLog = posix_ipc.MessageQueue(CONV_TO_LOG_QUEUE, posix_ipc.O_CREAT)          #CONV_To_LOG
 mqToStat = posix_ipc.MessageQueue(CONV_TO_STAT_QUEUE, posix_ipc.O_CREAT)        #CONV_To_STAT_
 mqToReport = posix_ipc.MessageQueue(STAT_TO_REPORT_QUEUE, posix_ipc.O_CREAT)    #STAT_To_REPORT
 
-
-#ToDo
-#CLEANUP .close()
-#..
-
 child_pids = [] # Array um alle PIDs der Kindprozesse zu speichern -> für SignalHandler
 
 
 def signal_handler(sig, frame):                 # Signal Handler für Ctrl + C Interrupt
     print("Signal zum Beenden empfangen")
-    mqToLog.close()
+                                                
+
     for pid in child_pids:
-        os.kill(pid, signal.SIGTERM)            # Sendet SIGTERM an jeden Kindprozess
+        os.kill(pid, signal.SIGTERM)            # Endet alle Forks/Kindprozesse
+    mq_cleaner()                                # Entsorgt die MessageQueues
     print("Alle Kindprozesse wurden beendet")
-    print("Main wird beendet")
+    print("Elternprozess wird beendet")
     sys.exit(0)                                 # beendet main
+
+def mq_cleaner():                       # Leert und schließt die MessageQueues
+    mq_flush(mqToLog)
+    mq_flush(mqToStat)
+    mq_flush(mqToReport)
+    mqToLog.close()                     # Schließt alle Queues
+    mqToStat.close()                    
+    mqToReport.close()
+    mqToLog.unlink()                    # Löscht alle Queues
+    mqToStat.unlink()
+    mqToReport.unlink()
+    print("Alle Queues Flushed & Closed & Deleted ")
+
+
+def mq_flush(mq):                       # Leert die MessageQueues
+    while True:
+        try:
+            mq.receive(timeout=0)       # Empfängt Nachricht, aber blockiert nicht
+        except posix_ipc.BusyError:
+            break                       # Wenn keine Nachrichten mehr, beendet Schleife
+        except posix_ipc.Error as e:
+            print("Fehler beim Flush der Message Queue")
+            break
 
 if __name__ == "__main__":                  
 
@@ -52,17 +65,15 @@ if __name__ == "__main__":
     
 
     for i in range (len(processes)):            # Erstellt Kindprozesse mit Fork, bis alle gestartet sind
-        #PID = Rückgabewert bei fork
+        # PID = Rückgabewert bei fork
         # -1 = fehlgeschlagen
         #  0 = Ich bin ein Kindprozess
         # >0 = Ich bin ein Elternprozess
 
         pid = os.fork()         # Fork um Kindprozess zu erstellen mit Rückgabewert=pid
-        # Eltern&Kindprozess läuft ab hier als identische Kopie weiter, außer dass pid Wert anders ist
+        # Eltern&Kindprozess läuft ab hier als identische Kopie weiter, außer dass pid Wert unterschiedlich ist
 
         if pid == 0:            # Startet NUR im KINDPROZESS, wegen pid=0
-            
-            #print("Prozess: ", processes[i])
 
             selected_process = processes[i]                 # geht die Liste nacheinander durch, um die Funktionen zu starten
 
@@ -89,4 +100,5 @@ if __name__ == "__main__":
 
     for _ in range(len(processes)):                                 # wartet bis alle Kindprozesse geendet sind, damit signalHandler funktioniert und main weiter läuft
         print("warte auf Beendung von Kindprozesse")
-        os.wait()      
+        os.wait()                       
+     
