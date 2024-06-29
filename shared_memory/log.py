@@ -1,4 +1,4 @@
-import mmap
+import mmap # ermöglicht  direkten Zugriff auf Dateien im Speicher
 
 #log_process
 def write_log_datei(digital_value):  # Generierte Werte aus dem conv process müssen weiter gegeben werden
