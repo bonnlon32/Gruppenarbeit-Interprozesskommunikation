@@ -4,8 +4,8 @@ import time
 
                                                                                       # Funktion simuliert einen A/D-Wandler(Von Noah).
 def analog_to_digital_converter():
-    #Gibt zufälligen Eingangswert (double zwischen -1 bis 5 Volt) aus, um A/D-Converter mit einschließlich nicht plausiblen Werten zu simulieren
-    digital_value = round(random.uniform(0.1, 5),2)   
+    #Gibt zufälligen Eingangswert (double zwischen -1 bis 10 Volt) aus, um A/D-Converter mit einschließlich nicht plausiblen Werten zu simulieren
+    digital_value = round(random.uniform(-1, 10))   
     if digital_value < 0:                                                              # Prüfung des Messwerts auf Plausibilität
         digital_value = 0                                                              # wenn Messwert nicht plausibel, wird auf 0 gesetzt
     return digital_value
