@@ -1,19 +1,13 @@
 import time
 
-
+# Dieser Enlosprozess empfängt Daten mittels MessageQueue aus Stat_ und gibt diese in der Shell aus
 
 def report_process(mqToReport):
-
-    print("- - - REPORT-PROZESS\t GESTARTET - - -")
+    time.sleep(1)
 
     while True:
 
-        messageSum, priorität = mqToReport.receive()
-        messageAvrg, priorität = mqToReport.receive()      # Empfangen der Nachricht, speichern der Prio sepperat
-
-        messageSum = round(float(messageSum.decode()),2)            # Konvertierung von Byte zu String zu float und gerundet 2. Stelle
-        messageAvrg = round(float(messageAvrg.decode()),2)          # Konvertierung von Byte zu String zu float und gerundet 2. Stelle
-
-        print("REPORT - Summe: ", messageSum)              # Ausgabe
-        print("REPORT - Mittelwert: ", messageAvrg)        # Ausgabe
+        message, priorität = mqToReport.receive()                   # Empfangen der Nachricht, speichern der Prio sepperat
+        messageDecoded = message.decode('utf-8')                    # Konvertierung von Byte zu String 
+        print(messageDecoded)                                       # Ausgabe
         time.sleep(1)

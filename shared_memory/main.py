@@ -1,5 +1,5 @@
-import os
-import posix_ipc
+import os           # Modul für Betriebssystem-Funktionen
+import posix_ipc    # Modul für Funktionen der Interprozesskommunikation gemäß Standards
 import signal       # Modul für das Behandeln von Signalen wie SIGINT (Ctrl+C)
 import sys          # Modul zur Systemmanipulation (z.B. zum Beenden des Programms)
 
@@ -49,6 +49,12 @@ if __name__ == "__main__":
     
     try:
         # Erstellen des Prozessgerüstes mithilfe von fork()
+        pid_conv = os.fork() 
+        if pid_conv == 0:
+            conv_process(shm_conv_log,shm_conv_stat,semaphore_conv_log, semaphore_conv_stat)  # Hauptfunktionsaufruf für den conv-process
+            os._exit(0)
+
+
         pid_log = os.fork()
         if pid_log == 0:
             log_process(shm_conv_log, semaphore_conv_log)
@@ -64,8 +70,8 @@ if __name__ == "__main__":
             report_process(shm_stat_report, semaphore_stat_report)
             os._exit(0)
         signal.signal(signal.SIGINT, signal_handler) # Registriere einen Signalhandler für SIGINT (Ctrl+C), um das Programm zu beenden 
+        os.wait()
         
-        conv_process(shm_conv_log,shm_conv_stat,semaphore_conv_log, semaphore_conv_stat)  # Hauptfunktionsaufruf für den conv-process
         
     except KeyboardInterrupt as e:
         sys.exit(0)   # Beende das Programm mit einem Erfolgscode (0 steht für erfolgreichen Abschluss) 

@@ -1,38 +1,20 @@
 import random
 import time
-import sys
-import posix_ipc
 
-
-#A/D-Converter
+#Dieser Endlosprozess simuliert einen A/D-Converter mit fiktionalen Messwerten und sendet sie an Log und stat_ mittels MessageQueue
 
 
 def conv_process(mqToStat, mqToLog):
-
-    print("- - - CONV-PROZESS\t GESTARTET - - -")
-
-    try:
-        while True:
-            message = str(analog_to_digital_converter())        #Aufruf des Converters
-            #print("CONV Digitaler Eingangswert:", message)
-            message = message.encode()                          #Konvertierung Nachricht in Bytes)
-            mqToLog.send(message)                               #Sendet Nachricht zu Log
-            mqToStat.send(message)                              #Sendet Nachricht zu Stat
+    time.sleep(1)
 
 
-#Timeoutcode
-#            try:
-#
-#            except posix_ipc.BusyError:
-#                print("CONV Timeout bei mQueue Conv to log")
-#                mqToLog.close()
-#                raise
-
-            time.sleep(1)
-
-    except KeyboardInterrupt:
-         pass
-
+    while True:
+        message = str(analog_to_digital_converter())                # Aufruf des Converters
+        messageEncoded = message.encode()                           # Konvertierung Nachricht in Bytes)
+        mqToLog.send(messageEncoded)                                # Sendet Nachricht zu Log
+        mqToStat.send(messageEncoded)                               # Sendet Nachricht zu Stat 
+        time.sleep(1)
+    
          
 
 
