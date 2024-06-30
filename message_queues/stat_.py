@@ -9,10 +9,9 @@ def stat_process(mqToReport, mqToStat):
     sum = 0.0
     count = 0.0
     
-
     while True:
 
-        message, priorität = mqToStat.receive()              # Empfangen der Nachricht, speichern der Prio sepperat
+        message, priority = mqToStat.receive()              # Empfangen der Nachricht, speichern der Prio sepperat
         num = round(float(message.decode()),2)               # Konvertierung von Byte zu String zu float 
 
         count+=1

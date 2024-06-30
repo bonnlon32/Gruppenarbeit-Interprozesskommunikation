@@ -7,11 +7,8 @@ def log_process(mqToLog):
 
     filename = "random_numbers.txt"                     # Dateiname, in die die zufälligen Zahlen geschrieben werden sollen
 
-
     while True:                                     # Endlosschleife von Conv
-
-
-        message, priorität = mqToLog.receive()      # Empfangen der Nachricht, speichern der Prio sepperat #(b'Zahl',0) b = bytes, String, priorität >> 0 = Standard
+        message, priority = mqToLog.receive()      # Empfangen der Nachricht, speichern der Prio sepperat, priorität: 0 = Standard
         digital_num = message.decode()              # Konvertierung von Byte                 
 
         with open(filename, "a") as file:           # Öffnet Datei im Anhangmodus (a = append)

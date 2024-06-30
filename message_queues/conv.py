@@ -3,14 +3,12 @@ import time
 
 #Dieser Endlosprozess simuliert einen A/D-Converter mit fiktionalen Messwerten und sendet sie an Log und stat_ mittels MessageQueue
 
-
 def conv_process(mqToStat, mqToLog):
     time.sleep(1)
 
-
     while True:
-        message = str(analog_to_digital_converter())                # Aufruf des Converters
-        messageEncoded = message.encode()                           # Konvertierung Nachricht in Bytes)
+        message = str(analog_to_digital_converter())                # Aufruf des Converters und Typecast zu String
+        messageEncoded = message.encode()                           # Konvertierung Nachricht in Bytes
         mqToLog.send(messageEncoded)                                # Sendet Nachricht zu Log
         mqToStat.send(messageEncoded)                               # Sendet Nachricht zu Stat 
         time.sleep(1)
