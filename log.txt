@@ -1,0 +1,2 @@
+Der Messwert ist: 4
+Der Messwert ist: 1

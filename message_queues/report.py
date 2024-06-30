@@ -1,13 +1,13 @@
-import random
 import time
 
-# Behilfscode (random Zahlen) für Test
-def generate_random_number():
-    random_number = random.uniform(-1, 5)
-    return round(random_number, 2)
+# Dieser Enlosprozess empfängt Daten mittels MessageQueue aus Stat_ und gibt diese in der Shell aus
 
-def report_process():
+def report_process(mqToReport):
+    time.sleep(1)
 
     while True:
-        print(generate_random_number())     #Generierung & Ausgabe von Zahl
+
+        message, priorität = mqToReport.receive()                   # Empfangen der Nachricht, speichern der Prio sepperat
+        messageDecoded = message.decode('utf-8')                    # Konvertierung von Byte zu String 
+        print(messageDecoded)                                       # Ausgabe
         time.sleep(1)

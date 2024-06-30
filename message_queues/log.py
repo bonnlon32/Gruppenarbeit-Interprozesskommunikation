@@ -1,24 +1,20 @@
-import random
-import os
 import time
 
-def log_process():
+# Dieser Endlosprozess empfängt Daten mittels MessageQueue aus Conv und speichert diese in einer Txt Datei
 
-    filename = "random_numbers.txt"    # Dateiname, in die die zufälligen Zahlen geschrieben werden sollen
+def log_process(mqToLog):
+    time.sleep(1)
 
-    while True:     # Endlosschleife
-        
-        digital_num = generate_random_number()   #Funktionsaufruf Behilfscode
-        
-        with open(filename, "a") as file:   # Öffnet Datei im Anhangmodus (a = append)
-            file.write(f"{digital_num}\n")
-        
-        print(f"Zufallswert: {digital_num}\t-> In die Datei '{filename}' geschrieben.") #Ausgabe
-        
-        time.sleep(1)
+    filename = "random_numbers.txt"                     # Dateiname, in die die zufälligen Zahlen geschrieben werden sollen
 
 
-# Behilfscode (random Zahlen) für Test
-def generate_random_number():
-    random_number = random.uniform(-1, 10)
-    return round(random_number, 2)
+    while True:                                     # Endlosschleife von Conv
+
+
+        message, priorität = mqToLog.receive()      # Empfangen der Nachricht, speichern der Prio sepperat #(b'Zahl',0) b = bytes, String, priorität >> 0 = Standard
+        digital_num = message.decode()              # Konvertierung von Byte                 
+
+        with open(filename, "a") as file:           # Öffnet Datei im Anhangmodus (a = append)
+            file.write(f"{digital_num}\n")          # Automatische Schließung nach Verlassen des Blocks
+        
+        time.sleep(0.5)

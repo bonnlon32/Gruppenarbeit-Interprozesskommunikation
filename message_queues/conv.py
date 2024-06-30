@@ -1,18 +1,21 @@
 import random
 import time
-import sys
-#import posix_ipc
 
-#A/D-Converter
-#Synchronisation(!)
-#Binär oder Dezimal -> ist unsere Wahl
+#Dieser Endlosprozess simuliert einen A/D-Converter mit fiktionalen Messwerten und sendet sie an Log und stat_ mittels MessageQueue
 
-def conv_process():
+
+def conv_process(mqToStat, mqToLog):
+    time.sleep(1)
+
+
     while True:
-        
-        print("Digitaler Eingangswert:", analog_to_digital_converter())  # Ausgabe und Aufruf des Converters
-        
+        message = str(analog_to_digital_converter())                # Aufruf des Converters
+        messageEncoded = message.encode()                           # Konvertierung Nachricht in Bytes)
+        mqToLog.send(messageEncoded)                                # Sendet Nachricht zu Log
+        mqToStat.send(messageEncoded)                               # Sendet Nachricht zu Stat 
         time.sleep(1)
+    
+         
 
 
 def analog_to_digital_converter():
